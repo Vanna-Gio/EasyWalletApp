@@ -58,6 +58,10 @@ fun LoginScreen(navController: NavController) {
                authViewModel.login(email, password)  {success, error ->
                    if (success) {
                        //Go Home
+                       navController.navigate("home"){
+                           popUpTo("login") { inclusive = true }
+                       }
+
                    }else{
                        errorMessage = error ?: "Login failed"
                    }
