@@ -43,11 +43,18 @@ dependencies {
 
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
     implementation("com.google.firebase:firebase-firestore-ktx:24.10.0")
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0") // Add this line
 
     implementation("androidx.navigation:navigation-compose:2.7.7")
+
 //QR Code Pay System
     implementation("com.google.zxing:core:3.5.2")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+
+
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -57,7 +64,8 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation("androidx.compose.material:material-icons-extended:1.6.3") // Add this line
+    implementation("androidx.compose.material:material-icons-extended:1.6.3")
+    implementation("io.coil-kt:coil-compose:2.6.0") // Add Coil Compose
     implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.androidx.compose.animation.core.lint)
     testImplementation(libs.junit)
