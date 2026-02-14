@@ -16,8 +16,22 @@ class HomeViewModel : ViewModel() {
     private val _userData = MutableStateFlow<User?>(null)
     val userData: StateFlow<User?> = _userData
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
+
     fun loadUserData() {
-        val uid = auth.currentUser?.uid ?: return
+        _isLoading.value = true
+        _errorMessage.value = null
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            _errorMessage.value = "User not logged in."
+            _isLoading.value = false
+            return
+        }
+
         viewModelScope.launch {
             db.collection("users")
                 .document(uid)
@@ -25,6 +39,11 @@ class HomeViewModel : ViewModel() {
                 .addOnSuccessListener { doc ->
                     val user = doc.toObject(User::class.java)
                     _userData.value = user
+                    _isLoading.value = false
+                }
+                .addOnFailureListener { e ->
+                    _errorMessage.value = e.message
+                    _isLoading.value = false
                 }
         }
     }

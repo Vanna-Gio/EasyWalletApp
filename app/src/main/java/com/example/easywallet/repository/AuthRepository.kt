@@ -12,6 +12,7 @@ class AuthRepository {
     fun login(
         email: String,
         password: String,
+        // onResult callback to report success or failure
         onResult: (Boolean, String?) -> Unit
     ) {
         auth.signInWithEmailAndPassword(email, password)
@@ -28,6 +29,7 @@ class AuthRepository {
         name: String,
         email: String,
         password: String,
+        phoneNumber: String,
         onResult: (Boolean, String?) -> Unit
     ) {
 
@@ -42,7 +44,8 @@ class AuthRepository {
                         uid = uid,
                         name = name,
                         email = email,
-                        balance = 0.0
+                        balance = 0.0,
+                        phoneNumber = phoneNumber
                     )
 
                     db.collection("users")
@@ -82,5 +85,40 @@ class AuthRepository {
 
     fun logout() {
         auth.signOut()
+    }
+
+    fun sendPasswordResetEmail(email: String, onResult: (Boolean, String?) -> Unit) {
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    onResult(true, null)
+                } else {
+                    onResult(false, task.exception?.message)
+                }
+            }
+    }
+
+    fun changePassword(currentPassword: String, newPassword: String, onResult: (Boolean, String?) -> Unit) {
+        val user = auth.currentUser
+        if (user != null && user.email != null) {
+            val credential = com.google.firebase.auth.EmailAuthProvider.getCredential(user.email!!, currentPassword)
+            user.reauthenticate(credential)
+                .addOnCompleteListener { reauthTask ->
+                    if (reauthTask.isSuccessful) {
+                        user.updatePassword(newPassword)
+                            .addOnCompleteListener { updateTask ->
+                                if (updateTask.isSuccessful) {
+                                    onResult(true, null)
+                                } else {
+                                    onResult(false, updateTask.exception?.message)
+                                }
+                            }
+                    } else {
+                        onResult(false, reauthTask.exception?.message)
+                    }
+                }
+        } else {
+            onResult(false, "User not logged in or email not available.")
+        }
     }
 }

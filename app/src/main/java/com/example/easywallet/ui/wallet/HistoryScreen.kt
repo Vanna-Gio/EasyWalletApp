@@ -7,18 +7,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.easywallet.viewModel.wallet.HistoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistoryScreen(navController: NavController) {
+fun HistoryScreen(navController: NavController, vm: HistoryViewModel) { // vm passed as parameter
 
-    val vm: HistoryViewModel = viewModel()
     val history by vm.history.collectAsState()
+    val isLoading by vm.isLoading.collectAsState()
+    val errorMessage by vm.errorMessage.collectAsState()
 
     LaunchedEffect(Unit) {
         vm.loadHistory()
@@ -40,27 +41,45 @@ fun HistoryScreen(navController: NavController) {
         }
     ) { padding ->
 
-        LazyColumn(
+        Box(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp)
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
         ) {
-
-            items(history) { tx ->
-
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
+            if (isLoading) {
+                CircularProgressIndicator()
+            } else if (errorMessage != null) {
+                Text(
+                    text = "Error: ${errorMessage}",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            } else if (history.isEmpty()) {
+                Text(
+                    text = "No transactions found.",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
                 ) {
-
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-
-                        Text("From: ${tx.senderId}")
-                        Text("To: ${tx.receiverId}")
-                        Text("Amount: $${tx.amount}")
+                    items(history) { tx ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp)
+                            ) {
+                                Text("From: ${tx.senderId}", style = MaterialTheme.typography.bodyMedium)
+                                Text("To: ${tx.receiverId}", style = MaterialTheme.typography.bodyMedium)
+                                Text("Amount: $${tx.amount}", style = MaterialTheme.typography.bodyMedium)
+                                Text("Date: ${tx.timestamp?.toDate()}", style = MaterialTheme.typography.bodySmall) // Assuming timestamp is a Firebase Timestamp
+                            }
+                        }
                     }
                 }
             }

@@ -8,8 +8,12 @@ class HistoryRepository {
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
-    fun getMyTransactions(onResult: (List<Transaction>) -> Unit) {
-        val uid = auth.currentUser?.uid ?: return
+    fun getMyTransactions(onResult: (List<Transaction>, String?) -> Unit) {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            onResult(emptyList(), "User not logged in")
+            return
+        }
 
         db.collection("transactions")
             .whereEqualTo("senderId", uid)
@@ -24,9 +28,15 @@ class HistoryRepository {
                             sent.toObjects(Transaction::class.java) +
                                     received.toObjects(Transaction::class.java)
                         onResult(list.sortedByDescending {
-                            it.timestamp
-                        })
+                            it.timestamp?.toDate() // Sort by date after conversion
+                        }, null)
                     }
+                    .addOnFailureListener { e ->
+                        onResult(emptyList(), e.message)
+                    }
+            }
+            .addOnFailureListener { e ->
+                onResult(emptyList(), e.message)
             }
     }
 }

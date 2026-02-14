@@ -19,8 +19,9 @@ class AuthViewModel : ViewModel() {
         name : String,
         email: String,
         password: String,
+        phoneNumber: String,
         onResult: (Boolean, String?) -> Unit
     ) {
-        repository.register(name, email, password, onResult)
+        repository.register(name, email, password, phoneNumber, onResult)
     }
 }

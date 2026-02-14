@@ -1,14 +1,11 @@
 package com.example.easywallet.ui.home
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.easywallet.viewModel.home.HomeViewModel
 
@@ -17,6 +14,8 @@ import com.example.easywallet.viewModel.home.HomeViewModel
 fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel) {
 
     val user by homeViewModel.userData.collectAsState()
+    val isLoading by homeViewModel.isLoading.collectAsState()
+    val errorMessage by homeViewModel.errorMessage.collectAsState()
 
     LaunchedEffect(Unit) {
         homeViewModel.loadUserData()
@@ -38,70 +37,79 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            if (isLoading) {
+                CircularProgressIndicator()
+            } else if (errorMessage != null) {
+                Text(
+                    text = "Error: ${errorMessage}",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            } else {
+                Text(
+                    text = "Welcome, ${user?.name ?: ""}",
+                    style = MaterialTheme.typography.headlineSmall
+                )
 
-            Text(
-                text = "Welcome, ${user?.name ?: ""}",
-                style = MaterialTheme.typography.headlineSmall
-            )
+                Spacer(Modifier.height(16.dp))
 
-            Spacer(Modifier.height(16.dp))
-
-            Card(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-
-                Column(
-                    modifier = Modifier.padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Card(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
 
-                    Text("Wallet Balance")
+                    Column(
+                        modifier = Modifier.padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
 
-                    Spacer(Modifier.height(8.dp))
+                        Text("Wallet Balance")
 
-                    Text(
-                        text = "$ ${user?.balance ?: 0.0}",
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                        Spacer(Modifier.height(8.dp))
+
+                        Text(
+                            text = "$ ${user?.balance ?: 0.0}",
+                            style = MaterialTheme.typography.headlineMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
-            }
 
-            Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(24.dp))
 
-            Button(
-                onClick = {
-                    navController.navigate("send")
+                Button(
+                    onClick = {
+                        navController.navigate("send")
+                    }
+                ) {
+                    Text("Send Money")
                 }
-            ) {
-                Text("Send Money")
-            }
 
-            Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
 
-            Button(
-                onClick = {
-                    navController.navigate("history")
+                Button(
+                    onClick = {
+                        navController.navigate("history")
+                    }
+                ) {
+                    Text("Transaction History")
                 }
-            ) {
-                Text("Transaction History")
-            }
 
-            Button(
-                onClick = {
-                    navController.navigate("myqr")
+                Button(
+                    onClick = {
+                        navController.navigate("myqr")
+                    }
+                ) {
+                    Text("My QR")
                 }
-            ) {
-                Text("My QR")
-            }
-            Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
 
-            Button(
-                onClick = {
-                    navController.navigate("profile")
+                Button(
+                    onClick = {
+                        navController.navigate("profile")
+                    }
+                ) {
+                    Text("Profile")
                 }
-            ) {
-                Text("Profile")
             }
         }
     }

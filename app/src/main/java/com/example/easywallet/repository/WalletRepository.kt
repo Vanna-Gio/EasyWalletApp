@@ -18,6 +18,10 @@ class WalletRepository {
             val senderSnap = transaction.get(senderRef)
             val receiverSnap = transaction.get(receiverRef)
 
+            if (!receiverSnap.exists()) {
+                throw Exception("Receiver does not exist")
+            }
+
             val senderBalance =
                 senderSnap.getDouble("balance") ?: 0.0
 
