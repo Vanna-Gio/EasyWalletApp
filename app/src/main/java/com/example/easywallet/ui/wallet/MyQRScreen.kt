@@ -3,17 +3,21 @@ package com.example.easywallet.ui.wallet
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyQRScreen() {
+fun MyQRScreen(navController: NavController) {
 
     val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
@@ -38,21 +42,34 @@ fun MyQRScreen() {
             }
         }
     }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("My QR Code")},
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack()  }) {
+                        Icon( imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back" )
+                    }
+                }
+            )
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center
-    ) {
+            Text("My QR Code")
 
-        Text("My QR Code")
+            Spacer(Modifier.height(16.dp))
 
-        Spacer(Modifier.height(16.dp))
-
-        Image(
-            bitmap = bitmap.asImageBitmap(),
-            contentDescription = null
-        )
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = null
+            )
+        }
     }
 }

@@ -10,11 +10,11 @@
       </SelectionState>
       <SelectionState runConfigName="MainActivity (1)">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-02-13T23:52:04.020539200Z">
+        <DropdownSelection timestamp="2026-02-14T01:22:55.934227800Z">
           <Target type="DEFAULT_BOOT">
-            <template>
-              <DeviceId pluginId="FirebaseDirectAccess" type="TEMPLATE" identifier="model_id=tokay/34" />
-            </template>
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Sovanna Ra\.android\avd\flutter_emulator.avd" />
+            </handle>
           </Target>
         </DropdownSelection>
         <DialogSelection />
