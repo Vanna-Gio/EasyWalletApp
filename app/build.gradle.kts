@@ -45,6 +45,9 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx:24.10.0")
 
     implementation("androidx.navigation:navigation-compose:2.7.7")
+//QR Code Pay System
+    implementation("com.google.zxing:core:3.5.2")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

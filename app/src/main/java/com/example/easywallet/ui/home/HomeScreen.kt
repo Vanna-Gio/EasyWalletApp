@@ -1,6 +1,8 @@
 package com.example.easywallet.ui.home
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,6 +28,14 @@ fun HomeScreen(navController: NavController) {
         topBar = {
             TopAppBar(
                 title = { Text("EasyWallet Dashboard") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                             "Back"
+                        )
+                    }
+                },
                 actions = {
 
                     TextButton(
@@ -89,6 +99,24 @@ fun HomeScreen(navController: NavController) {
                 }
             ) {
                 Text("Send Money")
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate("history")
+                }
+            ) {
+                Text("Transaction History")
+            }
+
+            Button(
+                onClick = {
+                    navController.navigate("myqr")
+                }
+            ) {
+                Text("My QR")
             }
         }
     }

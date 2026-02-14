@@ -8,6 +8,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.easywallet.ui.auth.LoginScreen
 import com.example.easywallet.ui.auth.RegisterScreen
 import com.example.easywallet.ui.home.HomeScreen
+import com.example.easywallet.ui.wallet.HistoryScreen
+import com.example.easywallet.ui.wallet.MyQRScreen
 import com.example.easywallet.ui.wallet.SendMoneyScreen
 
 @Composable
@@ -29,6 +31,12 @@ fun EasyWalletNavGraph() {
         }
         composable("send") {
             SendMoneyScreen(navController)
+        }
+        composable("history") {
+            HistoryScreen(navController)
+        }
+        composable("myqr") {
+            MyQRScreen()
         }
     }
 }
