@@ -80,6 +80,16 @@ fun HomeScreen(navController: NavController) {
                     )
                 }
             }
+
+            Spacer(Modifier.height(24.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate("send")
+                }
+            ) {
+                Text("Send Money")
+            }
         }
     }
 }
