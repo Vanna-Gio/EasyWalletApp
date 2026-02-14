@@ -12,9 +12,7 @@ import androidx.navigation.NavController
 import com.example.easywallet.viewModel.auth.AuthViewModel
 
 @Composable
-fun LoginScreen(navController: NavController) {
-    val authViewModel: AuthViewModel = viewModel()
-
+fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
     var errorMessage by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }

@@ -60,6 +60,27 @@ class AuthRepository {
                 }
             }
     }
+    fun getCurrentUser(onResult: (User?) -> Unit) {
+        val uid = auth.currentUser?.uid
+        if (uid != null) {
+            db.collection("users").document(uid).get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        val user = document.toObject(User::class.java)
+                        onResult(user)
+                    } else {
+                        onResult(null)
+                    }
+                }
+                .addOnFailureListener {
+                    onResult(null)
+                }
+        } else {
+            onResult(null)
+        }
+    }
 
-
+    fun logout() {
+        auth.signOut()
+    }
 }

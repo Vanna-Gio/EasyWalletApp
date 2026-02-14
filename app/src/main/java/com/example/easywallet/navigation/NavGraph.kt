@@ -10,23 +10,31 @@ import com.example.easywallet.ui.home.HomeScreen
 import com.example.easywallet.ui.wallet.HistoryScreen
 import com.example.easywallet.ui.wallet.MyQRScreen
 import com.example.easywallet.ui.wallet.SendMoneyScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.easywallet.ui.profile.ProfileScreen
+import com.example.easywallet.viewModel.Profile.ProfileViewModel
+import com.example.easywallet.viewModel.auth.AuthViewModel
+import com.example.easywallet.viewModel.home.HomeViewModel
 
 @Composable
 fun EasyWalletNavGraph() {
     val navController = rememberNavController()
+    val authViewModel: AuthViewModel = viewModel()
+    val homeViewModel: HomeViewModel = viewModel()
+    val profileViewModel: ProfileViewModel = viewModel()
 
     NavHost(
         navController = navController,
         startDestination = "login"
     ){
         composable("login") {
-            LoginScreen(navController)
+            LoginScreen(navController, authViewModel)
         }
         composable("register") {
-            RegisterScreen(navController)
+            RegisterScreen(navController, authViewModel)
         }
         composable("home") {
-            HomeScreen(navController)
+            HomeScreen(navController, homeViewModel)
         }
         composable("send") {
             SendMoneyScreen(navController)
@@ -36,6 +44,9 @@ fun EasyWalletNavGraph() {
         }
         composable("myqr") {
             MyQRScreen(navController)
+        }
+        composable("profile") {
+            ProfileScreen(navController, profileViewModel)
         }
     }
 }

@@ -14,9 +14,7 @@ import com.example.easywallet.viewModel.home.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController) {
-
-    val homeViewModel: HomeViewModel = viewModel()
+fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel) {
 
     val user by homeViewModel.userData.collectAsState()
 
@@ -27,29 +25,7 @@ fun HomeScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("EasyWallet Dashboard") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                             "Back"
-                        )
-                    }
-                },
-                actions = {
-
-                    TextButton(
-                        onClick = {
-                            homeViewModel.logout()
-                            navController.navigate("login") {
-                                popUpTo("home") { inclusive = true }
-                            }
-                        }
-                    ) {
-                        Text("Logout")
-                    }
-
-                }
+                title = { Text("EasyWallet Dashboard") }
             )
         }
     ) { padding ->
@@ -117,6 +93,15 @@ fun HomeScreen(navController: NavController) {
                 }
             ) {
                 Text("My QR")
+            }
+            Spacer(Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate("profile")
+                }
+            ) {
+                Text("Profile")
             }
         }
     }
